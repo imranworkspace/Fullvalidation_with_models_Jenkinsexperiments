@@ -5,7 +5,45 @@ pipeline {
         PYTHON = "C:\\Users\\imran\\AppData\\Local\\Programs\\Python\\Python38\\python.exe"
         DOCKER_IMAGE = "imrandocker24/formvalidation_with__model_jenkinsexperiments"
     }
+    // for setcon job and take the backup into respective folder each 30 mins
+    pipeline {
+        agent any
+        triggers {
+            cron('H/30 * * * *')  // Every 30 minutes
+        }
 
+        environment {
+            DB_NAME = "fpractice_db2"
+            DB_USER = "postgres"
+            BACKUP_DIR = "D:/jenkins_backups"
+        }
+
+        stages {
+            stage('Backup Database') {
+                steps {
+                    script {
+                        sh '''
+                        echo "Cleaning old backups..."
+                        find ${BACKUP_DIR} -name "*.sql" -mtime +1 -delete
+
+                        echo "Creating new PostgreSQL backup..."
+                        mkdir -p ${BACKUP_DIR}
+                        docker exec -t db pg_dump -U ${DB_USER} ${DB_NAME} > ${BACKUP_DIR}/${DB_NAME}_$(date +%Y%m%d_%H%M%S).sql
+
+                        echo "Backup completed successfully!"
+                        '''
+                    }
+                }
+            }
+        }
+
+        post {
+            success {
+                archiveArtifacts artifacts: '**/*.sql', fingerprint: true
+            }
+        }
+    }
+    // working code without cronjob and backup
     stages {
 
         stage('Checkout Code') {
