@@ -77,7 +77,8 @@ pipeline {
     // ---------------- Post Actions ----------------
     post {
         success {
-            archiveArtifacts artifacts: '**/*.sql', fingerprint: true
+            //archiveArtifacts artifacts: '**/*.sql', fingerprint: true
+            archiveArtifacts artifacts: 'scripts/sql/**/*.sql'
         }
         failure {
             echo 'Pipeline failed. Check the console output for errors.'
