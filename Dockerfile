@@ -20,5 +20,5 @@ COPY . /app/
 RUN python manage.py collectstatic --noinput
 
 # Run Gunicorn
-CMD ["gunicorn", "formvalidation_with__model.wsgi:application", "--bind", "0.0.0.0:8010"]
+CMD ["gunicorn", "formvalidation_with__model.wsgi:application", "--bind", "0.0.0.0:8011"]
 

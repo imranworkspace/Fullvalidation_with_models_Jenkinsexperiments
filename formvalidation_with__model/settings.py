@@ -93,7 +93,7 @@ DATABASES = {
         'NAME': 'fpractice_db2',
         'USER': 'postgres',# your username
         'PASSWORD': 'imrandell',
-        'HOST': 'db',  # for docker
+        'HOST': 'db_jenkinsexp',  # for docker
         'PORT': '5432',       # Default PostgreSQL port
     }
 }
@@ -160,5 +160,14 @@ MEDIA_ROOT = BASE_DIR / 'media'  # or os.path.join(BASE_DIR, 'media') if BASE_DI
 '''CELERY_BROKER_URL = "redis://127.0.0.1:6379/1"
 CELERY_RESULT_BACKEND = "redis://127.0.0.1:6379/1"''' 
 # for docker,jenkins
-CELERY_BROKER_URL = "redis://redis:6379/1"
-CELERY_RESULT_BACKEND = "redis://redis:6379/1"
+CELERY_BROKER_URL = "redis://redis:6379/2"
+CELERY_RESULT_BACKEND = "redis://redis:6379/2"
+
+
+# allow 81 port 
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost',
+    'http://127.0.0.1',
+    'http://localhost:81',
+    'http://127.0.0.1:81',
+]
