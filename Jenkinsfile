@@ -77,8 +77,7 @@ pipeline {
     // ---------------- Post Actions ----------------
     post {
         success {
-            //archiveArtifacts artifacts: '**/*.sql', fingerprint: true
-            archiveArtifacts artifacts: 'scripts/sql/**/*.sql'
+                    archiveArtifacts artifacts: 'D:/jenkins_backups/*.sql', fingerprint: true, allowEmptyArchive: true
         }
         failure {
             echo 'Pipeline failed. Check the console output for errors.'
