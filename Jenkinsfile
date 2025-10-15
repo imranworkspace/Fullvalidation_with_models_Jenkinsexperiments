@@ -41,8 +41,8 @@ pipeline {
         stage('Run Migrations & Collectstatic') {
             steps {
                 // Wait for DB, then apply migrations & collect static files
-                bat 'docker exec formvalidation_with__model python manage.py migrate --noinput'
-                bat 'docker exec formvalidation_with__model python manage.py collectstatic --noinput'
+                bat 'docker exec formvalidation_with__model_jenkinsexperiments python manage.py migrate --noinput'
+                bat 'docker exec formvalidation_with__model_jenkinsexperiments python manage.py collectstatic --noinput'
             }
         }
 
