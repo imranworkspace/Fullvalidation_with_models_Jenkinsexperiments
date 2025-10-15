@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+</head>
+<body>
+    
+    <center>
+        <h2>Homepage</h2>
+        {% csrf_token %}
+        <h1>{{fname}}</h1>
+        
+        <a href="http://127.0.0.1:80/logout/" class="link-underline-info">Logout</a>  |  
+        <a href="http://127.0.0.1:80/login/" class="link-underline-info">Login Page</a>
+        <br>
+    </center>
+    <hr>
+     <h2>keys</h2>
+    {% for key in keys %}
+        <div>key:{{key}}</div><br>
+    {% endfor %}
+
+    <h2>items</h2>
+    {% for key,value in items %}
+        <div>{{key}} - {{value}}</div><br>
+    {% endfor %}
+
+    <b>getexpireatbrowser:</b> {{getexpireatbrowser}} <br><br>
+
+    <b>expiry_date</b> {{expiry_date}} <br><br>
+
+    <b>get_expiry_age</b> {{get_expiry_age}}
+    <br>
+    <hr>
+</body>
+</html>
