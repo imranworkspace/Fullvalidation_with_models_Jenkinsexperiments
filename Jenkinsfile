@@ -65,7 +65,7 @@ pipeline {
 
                         echo Creating new PostgreSQL backup...
                         if not exist "${BACKUP_DIR}" mkdir "${BACKUP_DIR}"
-                        docker exec -t db_jenkinsexp pg_dump -U ${DB_USER} ${DB_NAME} > "${BACKUP_DIR}\\${DB_NAME}_%date:~-4%%date:~3,2%%date:~0,2%_%time:~0,2%%time:~3,2%%time:~6,2%.sql"
+                        docker exec -t fullvaliation_jenkinsexperiments-db_jenkinsexp-1 pg_dump -U ${DB_USER} ${DB_NAME} > "${BACKUP_DIR}\\${DB_NAME}_%date:~-4%%date:~3,2%%date:~0,2%_%time:~0,2%%time:~3,2%%time:~6,2%.sql"
                         
                         echo Backup completed successfully!
                     """
