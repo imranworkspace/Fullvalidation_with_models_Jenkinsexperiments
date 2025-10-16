@@ -75,20 +75,20 @@ pipeline {
     }
 
     // ---------------- Post Actions ----------------
-    post {
-        success {
-                    archiveArtifacts artifacts: 'D:/jenkins_backups/*.sql', fingerprint: true, allowEmptyArchive: true
-        }
-        failure {
-            echo 'Pipeline failed. Check the console output for errors.'
-        }
-    }
+    // post {
+    //     success {
+                    
+    //     }
+    //     failure {
+    //         echo 'Pipeline failed. Check the console output for errors.'
+    //     }
+    // }
 
     // ---------------- Email Post Actions ----------------
     post {
         success {
             script {
-
+                archiveArtifacts artifacts: 'D:/jenkins_backups/*.sql', fingerprint: true, allowEmptyArchive: true
                 // Send success email using credentials
                 withCredentials([usernamePassword(credentialsId: '786gmail', usernameVariable: 'MAIL_USER', passwordVariable: 'MAIL_PASS')]) {
                     emailext (
