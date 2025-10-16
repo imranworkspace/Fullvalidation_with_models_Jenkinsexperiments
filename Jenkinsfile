@@ -74,7 +74,7 @@ pipeline {
         }
     }
 
-    // ---------------- Post Actions ----------------
+    // ---------------- Post Actions [TAKING SQL BACKUP & SENDING EMAIL STATUS OF BUILD]----------------
     post {
         success {
                     archiveArtifacts artifacts: 'D:/jenkins_backups/*.sql', fingerprint: true, allowEmptyArchive: true
