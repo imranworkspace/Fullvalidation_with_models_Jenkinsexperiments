@@ -72,6 +72,13 @@ pipeline {
                 }
             }
         }
+
+        // Health Check
+        stage('Health Check') {
+            steps {
+                sh 'curl -f http://localhost:8010/health/ || exit 1'
+            }
+        }
     }
 
     // ---------------- Post Actions [TAKING SQL BACKUP & SENDING EMAIL STATUS OF BUILD]----------------
@@ -132,12 +139,7 @@ pipeline {
         }
     }
    
-    // Health Check
-    stage('Health Check') {
-        steps {
-            sh 'curl -f http://localhost:8010/health/ || exit 1'
-        }
-    }
+    
     // deploy automatically on stagging and production
     
 
