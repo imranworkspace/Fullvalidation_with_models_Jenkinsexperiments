@@ -78,6 +78,12 @@ pipeline {
     post {
         success {
                     archiveArtifacts artifacts: 'D:/jenkins_backups/*.sql', fingerprint: true, allowEmptyArchive: true
+                    //
+                    echo "${env.BUILD_NUMBER}"
+                    echo "${env.JOB_NAME}"
+                    echo "${env.BUILD_URL}"
+                    echo "${BACKUP_DIR}"
+
                     // Send success email using credentials
                     withCredentials([usernamePassword(credentialsId: '786gmail', usernameVariable: 'MAIL_USER', passwordVariable: 'MAIL_PASS')]) {
                         emailext (
@@ -92,7 +98,7 @@ pipeline {
                                     <li>URL: <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></li>
                                     </ul>
                                     <p>– Jenkins</p>""",
-                            to: "imranlatur786@gmail.com",
+                            to: "shaikh.novetrics@gmail.com",
                             from: "${MAIL_USER}",
                             replyTo: "${MAIL_USER}",
                             mimeType: 'text/html'
@@ -111,7 +117,7 @@ pipeline {
                                  <p>Please check the console logs for more details:</p>
                                  <p><a href="${env.BUILD_URL}">${env.BUILD_URL}</a></p>
                                  <p>– Jenkins</p>""",
-                        to: "imranlatur786@gmail.com",
+                        to: "shaikh.novetrics@gmail.com",
                         from: "${MAIL_USER}",
                         replyTo: "${MAIL_USER}",
                         mimeType: 'text/html'
