@@ -125,7 +125,20 @@ pipeline {
                 }
             }
         }
+        // maintain logs
+        always {
+            archiveArtifacts artifacts: 'logs/**/*.log, coverage.xml', fingerprint: true
+        }
         }
     }
    
+    // Health Check
+    stage('Health Check') {
+        steps {
+            sh 'curl -f http://localhost:8010/health/ || exit 1'
+        }
+    }
+    // deploy automatically on stagging and production
+    
+
 }
