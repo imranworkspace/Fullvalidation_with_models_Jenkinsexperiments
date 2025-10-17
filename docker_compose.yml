@@ -1,0 +1,96 @@
+version: "3.9"
+
+services:
+  # ---------------- Django ----------------
+  django_jenkinsexp:
+    image: imrandocker24/formvalidation_with__model_jenkinsexperiments:latest
+    container_name: formvalidation_with__model_jenkinsexperiments
+    command: >
+      sh -c "python manage.py migrate --noinput &&
+             python manage.py runserver 0.0.0.0:8011"
+    ports:
+      - "8011:8011"
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/2
+      - CELERY_RESULT_BACKEND=redis://redis:6379/2
+    volumes:
+      - .:/app
+    depends_on:
+      - db_jenkinsexp
+      - redis
+
+  # ---------------- Redis ----------------
+  redis:
+    image: redis:7-alpine
+    container_name: redis_jenexp
+    ports:
+      - "6380:6379"
+
+  # ---------------- Celery Worker ----------------
+  celery:
+    image: imrandocker24/formvalidation_with__model_jenkinsexperiments:latest
+    container_name: celeryworker_jenkinsexp
+    command: celery -A formvalidation_with__model worker -l info
+    volumes:
+      - .:/app
+    depends_on:
+      - django_jenkinsexp
+      - redis
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/2
+      - CELERY_RESULT_BACKEND=redis://redis:6379/2
+
+  # ---------------- Celery Beat ----------------
+  celery-beat:
+    image: imrandocker24/formvalidation_with__model_jenkinsexperiments:latest
+    container_name: celerybeat_jenkinsexp
+    command: celery -A formvalidation_with__model beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    volumes:
+      - .:/app
+    depends_on:
+      - django_jenkinsexp
+      - redis
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/2
+      - CELERY_RESULT_BACKEND=redis://redis:6379/2
+
+  # ---------------- Flower Dashboard ----------------
+  flower:
+    image: imrandocker24/formvalidation_with__model_jenkinsexperiments:latest
+    container_name: flower_jenkinsexp
+    command: celery -A formvalidation_with__model flower --port=5556
+    ports:
+      - "5556:5556"
+    volumes:
+      - .:/app
+    depends_on:
+      - redis
+      - celery
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/2
+      - CELERY_RESULT_BACKEND=redis://redis:6379/2
+
+  # ---------------- Postgres ----------------
+  db_jenkinsexp:
+    image: postgres:15
+    container_name: db_jenkinsexp
+    environment:
+      POSTGRES_DB: fpractice_db2
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: imrandell
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+
+  # ---------------- Nginx ----------------
+  nginx:
+    image: nginx:latest
+    container_name: nginx_jenkinsexp
+    ports:
+      - "81:81"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - django_jenkinsexp
+
+volumes:
+  postgres_data:
