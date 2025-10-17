@@ -4,7 +4,7 @@ pipeline {
     // ---------------- Environment Variables ----------------
     environment {
         PYTHON = "C:\\Users\\imran\\AppData\\Local\\Programs\\Python\\Python38\\python.exe"
-        DOCKER_IMAGE = "imrandocker24/formvalidation_with__model_jenkinsexperiments"
+        DOCKER_IMAGE = "imran3656/formvalidation_with_jenkinsexperiments"
         DB_NAME = "fpractice_db2"
         DB_USER = "postgres"
         BACKUP_DIR = "D:/jenkins_backups"
@@ -55,31 +55,13 @@ pipeline {
             }
         }
         // health chk
-        stage('Health Check') {
-            steps {
-                script {
-                    bat 'curl -f http://localhost:81/reg/ || exit 1'
-                }
-            }
-        }
-
-        // ---------------- Backup Stage ----------------
-        stage('Backup Database') {
-            steps {
-                script {
-                    bat """
-                        echo Cleaning old backups...
-                        forfiles /p "${BACKUP_DIR}" /m *.sql /d -1 /c "cmd /c del @path"
-
-                        echo Creating new PostgreSQL backup...
-                        if not exist "${BACKUP_DIR}" mkdir "${BACKUP_DIR}"
-                        docker exec -t fullvaliation_jenkinsexperiments-db_jenkinsexp-1 pg_dump -U ${DB_USER} ${DB_NAME} > "${BACKUP_DIR}\\${DB_NAME}_%date:~-4%%date:~3,2%%date:~0,2%_%time:~0,2%%time:~3,2%%time:~6,2%.sql"
-                        
-                        echo Backup completed successfully!
-                    """
-                }
-            }
-        }
+        // stage('Health Check') {
+        //     steps {
+        //         script {
+        //             bat 'curl -f http://localhost:81/reg/ || exit 1'
+        //         }
+        //     }
+        // }
 
     }
 
