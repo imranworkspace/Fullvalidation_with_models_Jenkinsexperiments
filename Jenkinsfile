@@ -54,6 +54,14 @@ pipeline {
                 bat 'docker exec formvalidation_with__model_jenkinsexperiments python manage.py collectstatic --noinput'
             }
         }
+        // health chk
+        stage('Health Check') {
+            steps {
+                script {
+                    bat 'curl -f http://localhost:81/reg/ || exit 1'
+                }
+            }
+        }
 
         // ---------------- Backup Stage ----------------
         stage('Backup Database') {
@@ -129,11 +137,5 @@ pipeline {
         }
         }
     }    
-    stage('Health Check') {
-    steps {
-        script {
-            bat 'curl -f http://localhost:81/reg/ || exit 1'
-        }
-    }
-}
+    
 }
