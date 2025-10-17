@@ -1,5 +1,6 @@
 
 services:
+  # ---------------- Everyting is working fine now with same image only separate image created for ngnix,redis and postgres due to they have their own images
   # ---------------- Django ----------------
   django_jenkinsexp:
     image: imran3656/formvalidation_with_jenkinsexperiments
