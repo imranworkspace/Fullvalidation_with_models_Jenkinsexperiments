@@ -127,15 +127,13 @@ pipeline {
                 }
             }
         }
-        // // maintain logs
-        // always {
-        //     archiveArtifacts artifacts: 'logs/**/*.log, coverage.xml', fingerprint: true
-        // }
+        }
+    }    
+    stage('Health Check') {
+    steps {
+        script {
+            bat 'curl -f http://localhost:81/reg/ || exit 1'
         }
     }
-
-    
-    // deploy automatically on stagging and production
-    
-
+}
 }
