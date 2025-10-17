@@ -13,7 +13,7 @@ pipeline {
     // ---------------- CRON Schedule ----------------
     // Run automatically every 30 minutes
     triggers {
-        cron('H/30 * * * *')
+        cron('H/15 * * * *')
     }
 
     // ---------------- Pipeline Stages ----------------
@@ -73,72 +73,66 @@ pipeline {
             }
         }
 
-        // Health Check
-        stage('Health Check') {
-            steps {
-                sh 'curl -f http://localhost:81/reg/ || exit 1'
-            }
-        }
     }
 
     // ---------------- Post Actions [TAKING SQL BACKUP & SENDING EMAIL STATUS OF BUILD]----------------
     
-    // post {
-    //     success {
-    //                 archiveArtifacts artifacts: 'D:/jenkins_backups/*.sql', fingerprint: true, allowEmptyArchive: true
-    //                 //
-    //                 echo "${env.BUILD_NUMBER}"
-    //                 echo "${env.JOB_NAME}"
-    //                 echo "${env.BUILD_URL}"
-    //                 echo "${BACKUP_DIR}"
+    post {
+        success {
+                    archiveArtifacts artifacts: 'D:/jenkins_backups/*.sql', fingerprint: true, allowEmptyArchive: true
+                    //
+                    echo "${env.BUILD_NUMBER}"
+                    echo "${env.JOB_NAME}"
+                    echo "${env.BUILD_URL}"
+                    echo "${BACKUP_DIR}"
 
-    //                 // Send success email using credentials
-    //                 withCredentials([usernamePassword(credentialsId: '786gmail', usernameVariable: 'MAIL_USER', passwordVariable: 'MAIL_PASS')]) {
-    //                     emailext (
-    //                         subject: "✅ SUCCESS: Django Jenkins Pipeline Completed",
-    //                         body: """<p>Hi Team,</p>
-    //                                 <p>The Jenkins pipeline for <b>Form Validation Django Project</b> completed successfully.</p>
-    //                                 <p>Backup has been created in: <b>${BACKUP_DIR}</b></p>
-    //                                 <p>Build Details:</p>
-    //                                 <ul>
-    //                                 <li>Build Number: ${env.BUILD_NUMBER}</li>
-    //                                 <li>Job: ${env.JOB_NAME}</li>
-    //                                 <li>URL: <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></li>
-    //                                 </ul>
-    //                                 <p>– Jenkins</p>""",
-    //                         to: "shaikh.novetrics@gmail.com",
-    //                         from: "${MAIL_USER}",
-    //                         replyTo: "${MAIL_USER}",
-    //                         mimeType: 'text/html'
-    //                     )
-    //                 }
-    //     }
-    //     failure {
-    //         echo 'Pipeline failed. Check the console output for errors.'
-    //         failure {
-    //         script {
-    //             withCredentials([usernamePassword(credentialsId: '786gmail', usernameVariable: 'MAIL_USER', passwordVariable: 'MAIL_PASS')]) {
-    //                 emailext (
-    //                     subject: "❌ FAILED: Django Jenkins Pipeline Error",
-    //                     body: """<p>Hi Team,</p>
-    //                              <p>The Jenkins pipeline for <b>Form Validation Django Project</b> has failed.</p>
-    //                              <p>Please check the console logs for more details:</p>
-    //                              <p><a href="${env.BUILD_URL}">${env.BUILD_URL}</a></p>
-    //                              <p>– Jenkins</p>""",
-    //                     to: "shaikh.novetrics@gmail.com",
-    //                     from: "${MAIL_USER}",
-    //                     replyTo: "${MAIL_USER}",
-    //                     mimeType: 'text/html'
-    //                 )
-    //             }
-    //         }
-    //     }
-    //     // maintain logs
-    //     always {
-    //         archiveArtifacts artifacts: 'logs/**/*.log, coverage.xml', fingerprint: true
-    //     }
-    //     }
-    // }
+                    // Send success email using credentials
+                    withCredentials([usernamePassword(credentialsId: '786gmail', usernameVariable: 'MAIL_USER', passwordVariable: 'MAIL_PASS')]) {
+                        emailext (
+                            subject: "✅ SUCCESS: Django Jenkins Pipeline Completed",
+                            body: """<p>Hi Team,</p>
+                                    <p>The Jenkins pipeline for <b>Form Validation Django Project</b> completed successfully.</p>
+                                    <p>Backup has been created in: <b>${BACKUP_DIR}</b></p>
+                                    <p>Build Details:</p>
+                                    <ul>
+                                    <li>Build Number: ${env.BUILD_NUMBER}</li>
+                                    <li>Job: ${env.JOB_NAME}</li>
+                                    <li>URL: <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></li>
+                                    </ul>
+                                    <p>– Jenkins</p>""",
+                            to: "shaikh.novetrics@gmail.com",
+                            from: "${MAIL_USER}",
+                            replyTo: "${MAIL_USER}",
+                            mimeType: 'text/html'
+                        )
+                    }
+        }
+        failure {
+            echo 'Pipeline failed. Check the console output for errors.'
+            failure {
+            script {
+                withCredentials([usernamePassword(credentialsId: '786gmail', usernameVariable: 'MAIL_USER', passwordVariable: 'MAIL_PASS')]) {
+                    emailext (
+                        subject: "❌ FAILED: Django Jenkins Pipeline Error",
+                        body: """<p>Hi Team,</p>
+                                 <p>The Jenkins pipeline for <b>Form Validation Django Project</b> has failed.</p>
+                                 <p>Please check the console logs for more details:</p>
+                                 <p><a href="${env.BUILD_URL}">${env.BUILD_URL}</a></p>
+                                 <p>– Jenkins</p>""",
+                        to: "shaikh.novetrics@gmail.com",
+                        from: "${MAIL_USER}",
+                        replyTo: "${MAIL_USER}",
+                        mimeType: 'text/html'
+                    )
+                }
+            }
+        }
+        // // maintain logs
+        // always {
+        //     archiveArtifacts artifacts: 'logs/**/*.log, coverage.xml', fingerprint: true
+        // }
+        }
+    }
 
     
     // deploy automatically on stagging and production
