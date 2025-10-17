@@ -1,7 +1,8 @@
+
 services:
- # ----------------- Django -----------------
+  # ---------------- Django ----------------
   django_jenkinsexp:
-    build: .
+    image: imran3656/formvalidation_with_jenkinsexperiments
     container_name: formvalidation_with__model_jenkinsexperiments
     command: >
       sh -c "python manage.py migrate --noinput &&
@@ -15,18 +16,18 @@ services:
       - .:/app
     depends_on:
       - db_jenkinsexp
-      - redis 
+      - redis
 
-  # ----------------- Redis -----------------
+  # ---------------- Redis ----------------
   redis:
     image: redis:7-alpine
-    container_name: redis_jenexp # service name is redis4 so in settings also we need to specify
+    container_name: redis_jenexp
     ports:
-      - "6380:6379"  # external port changed
+      - "6380:6379"
 
-  # ----------------- Celery Worker -----------------
+  # ---------------- Celery Worker ----------------
   celery:
-    build: .
+    image: imran3656/formvalidation_with_jenkinsexperiments
     container_name: celeryworker_jenkinsexp
     command: celery -A formvalidation_with__model worker -l info
     volumes:
@@ -38,9 +39,9 @@ services:
       - CELERY_BROKER_URL=redis://redis:6379/2
       - CELERY_RESULT_BACKEND=redis://redis:6379/2
 
-  # ----------------- Celery Beat -----------------
+  # ---------------- Celery Beat ----------------
   celery-beat:
-    build: .
+    image: imran3656/formvalidation_with_jenkinsexperiments
     container_name: celerybeat_jenkinsexp
     command: celery -A formvalidation_with__model beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
     volumes:
@@ -52,9 +53,9 @@ services:
       - CELERY_BROKER_URL=redis://redis:6379/2
       - CELERY_RESULT_BACKEND=redis://redis:6379/2
 
-  # ----------------- Flower Dashboard -----------------
+  # ---------------- Flower Dashboard ----------------
   flower:
-    build: .
+    image: imran3656/formvalidation_with_jenkinsexperiments
     container_name: flower_jenkinsexp
     command: celery -A formvalidation_with__model flower --port=5556
     ports:
@@ -67,11 +68,11 @@ services:
     environment:
       - CELERY_BROKER_URL=redis://redis:6379/2
       - CELERY_RESULT_BACKEND=redis://redis:6379/2
-      - DJANGO_SETTINGS_MODULE=formvalidation_with__model.settings
 
-  # ----------------- Postgres DB -----------------
+  # ---------------- Postgres ----------------
   db_jenkinsexp:
     image: postgres:15
+    container_name: db_jenkinsexp
     environment:
       POSTGRES_DB: fpractice_db2
       POSTGRES_USER: postgres
@@ -79,13 +80,16 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data/
 
+  # ---------------- Nginx ----------------
   nginx:
     image: nginx:latest
+    container_name: nginx_jenkinsexp
     ports:
-      - "81:81"   # access on http://localhost/
+      - "81:81"
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
     depends_on:
       - django_jenkinsexp
+
 volumes:
   postgres_data:
