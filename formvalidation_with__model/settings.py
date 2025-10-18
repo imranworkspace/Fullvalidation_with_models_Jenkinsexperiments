@@ -12,6 +12,10 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
+from dotenv import load_dotenv
+
+# Load .env file
+load_dotenv()  # looks for .env in the same directory
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -22,6 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-toww60*fwetc^ri)b$brb-9zrgg-)j-t+hjiyf__08k2y0yi%2'
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -85,16 +90,14 @@ WSGI_APPLICATION = 'formvalidation_with__model.wsgi.application'
     }
 }'''
 
-
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',# for docker
-        'NAME': 'fpractice_db2',
-        'USER': 'postgres',# your username
-        'PASSWORD': 'imrandell',
-        'HOST': 'db_jenkinsexp',  # for docker
-        'PORT': '5432',       # Default PostgreSQL port
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('POSTGRES_DB'),
+        'USER': os.getenv('POSTGRES_USER'),
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
+        'HOST': os.getenv('DB_HOST', 'localhost'),
+        'PORT': os.getenv('DB_PORT', '5432'),
     }
 }
 
@@ -160,14 +163,20 @@ MEDIA_ROOT = BASE_DIR / 'media'  # or os.path.join(BASE_DIR, 'media') if BASE_DI
 '''CELERY_BROKER_URL = "redis://127.0.0.1:6379/1"
 CELERY_RESULT_BACKEND = "redis://127.0.0.1:6379/1"''' 
 # for docker,jenkins
-CELERY_BROKER_URL = "redis://redis:6379/2"
-CELERY_RESULT_BACKEND = "redis://redis:6379/2"
+'''CELERY_BROKER_URL = "redis://redis:6379/2"
+CELERY_RESULT_BACKEND = "redis://redis:6379/2"'''
+# Celery / Redis
+CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL')
+CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND')
+
+# CSRF trusted origins
+CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED', default='').split(',')
 
 
 # allow 81 port 
-CSRF_TRUSTED_ORIGINS = [
+'''CSRF_TRUSTED_ORIGINS = [
     'http://localhost',
     'http://127.0.0.1',
     'http://localhost:81',
     'http://127.0.0.1:81',
-]
+]'''
