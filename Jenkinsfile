@@ -26,7 +26,7 @@ pipeline {
                 echo "Backup Dir: ${env.BACKUP_DIR}"
             }
         }
-
+    }
     // ---------------- CRON Schedule ----------------
     // Run automatically every 30 minutes
     triggers {
