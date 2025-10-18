@@ -2,13 +2,30 @@ pipeline {
     agent any
 
     // ---------------- Environment Variables ----------------
-    environment {
-        PYTHON = "C:\\Users\\imran\\AppData\\Local\\Programs\\Python\\Python38\\python.exe"
-        DOCKER_IMAGE = "imran3656/formvalidation_with_jenkinsexperiments"
-        DB_NAME = "fpractice_db2"
-        DB_USER = "postgres"
-        BACKUP_DIR = "D:/jenkins_backups"
-    }
+    stages {
+        stage('Load Environment Variables') {
+            steps {
+                script {
+                    // Read the .env file into a Map
+                    def envVars = readProperties file: '.env'
+
+                    // Assign values to Jenkins global environment
+                    env.PYTHONPATH = envVars.PYTHONPATH
+                    env.DOCKER_IMAGE = envVars.DOCKER_IMAGE
+                    env.POSTGRES_DB = envVars.POSTGRES_DB
+                    env.POSTGRES_PASSWORD = envVars.POSTGRES_PASSWORD
+                    env.DB_BKP_PATH = envVars.DB_BKP_PATH
+
+                    // Aliases for convenience
+                    env.PYTHON = env.PYTHONPATH
+                    env.BACKUP_DIR = env.DB_BKP_PATH
+                }
+
+                echo "✅ Loaded environment variables from .env"
+                echo "Docker Image: ${env.DOCKER_IMAGE}"
+                echo "Backup Dir: ${env.BACKUP_DIR}"
+            }
+        }
 
     // ---------------- CRON Schedule ----------------
     // Run automatically every 30 minutes
