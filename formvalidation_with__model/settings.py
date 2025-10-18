@@ -15,7 +15,7 @@ import os
 from dotenv import load_dotenv
 
 # Load .env file
-load_dotenv()  # looks for .env in the same directory
+load_dotenv('/app/.env')  # path inside container
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -93,11 +93,11 @@ WSGI_APPLICATION = 'formvalidation_with__model.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('POSTGRES_DB'),
-        'USER': os.getenv('POSTGRES_USER'),
-        'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
-        'HOST': os.getenv('DB_HOST', 'localhost'),
-        'PORT': os.getenv('DB_PORT', '5432'),
+        'NAME': os.environ.get('POSTGRES_DB'),
+        'USER': os.environ.get('POSTGRES_USER'),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
+        'HOST': os.environ.get('DB_HOST', 'localhost'),
+        'PORT': os.environ.get('DB_PORT', '5432'),
     }
 }
 
@@ -166,11 +166,11 @@ CELERY_RESULT_BACKEND = "redis://127.0.0.1:6379/1"'''
 '''CELERY_BROKER_URL = "redis://redis:6379/2"
 CELERY_RESULT_BACKEND = "redis://redis:6379/2"'''
 # Celery / Redis
-CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL')
-CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND')
+CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_URL')
+CELERY_RESULT_BACKEND = os.environ.get('CELERY_RESULT_BACKEND')
 
 # CSRF trusted origins
-CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED', default='').split(',')
+CSRF_TRUSTED_ORIGINS = os.environ.get('CSRF_TRUSTED', default='').split(',')
 
 
 # allow 81 port 

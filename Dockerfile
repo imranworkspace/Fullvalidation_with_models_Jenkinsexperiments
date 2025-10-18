@@ -19,6 +19,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 # ---------- Copy Source Code ----------
 COPY . /app/
 
+# Copy .env into container
+COPY .env /app/.env
+
 # ---------- Collect Static Files (optional) ----------
 RUN python manage.py collectstatic --noinput || true
 
