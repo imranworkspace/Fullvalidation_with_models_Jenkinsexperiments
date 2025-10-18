@@ -163,17 +163,13 @@ CELERY_RESULT_BACKEND = "redis://127.0.0.1:6379/1"'''
 
 # for docker,jenkins
 # Redis connection
-# Redis connection
-REDIS_HOST = config('REDIS_HOST', default='redis')
-REDIS_PORT = config('REDIS_PORT', default='6379')
-REDIS_DB = config('REDIS_DB', default='2')
-REDIS_PASSWORD = config('REDIS_PASSWORD', default='')
+REDIS_HOST = config('REDIS_HOST')
+REDIS_PORT = config('REDIS_PORT')
+REDIS_DB = config('REDIS_DB')
 
-# If Redis requires a password
-if REDIS_PASSWORD:
-    REDIS_URL = f"redis://:{REDIS_PASSWORD}@{REDIS_HOST}:{REDIS_PORT}/{REDIS_DB}"
-else:
-    REDIS_URL = f"redis://{REDIS_HOST}:{REDIS_PORT}/{REDIS_DB}"
+
+CELERY_BROKER_URL = f"redis://{REDIS_HOST}:{REDIS_PORT}/{REDIS_DB}"
+CELERY_RESULT_BACKEND = f"redis://{REDIS_HOST}:{REDIS_PORT}/{REDIS_DB}"
 
 
 # allow 81 port 

@@ -10,9 +10,11 @@ services:
              python manage.py runserver 0.0.0.0:8011"
     ports:
       - "8011:8011"
-    environment:
-      - CELERY_BROKER_URL=redis://redis:6379/2
-      - CELERY_RESULT_BACKEND=redis://redis:6379/2
+    # environment:
+    #   - CELERY_BROKER_URL=redis://redis:6379/2
+    #   - CELERY_RESULT_BACKEND=redis://redis:6379/2
+    env_file:
+      - .env
     volumes:
       - .:/app
     depends_on:
@@ -36,9 +38,11 @@ services:
     depends_on:
       - django_jenkinsexp
       - redis
-    environment:
-      - CELERY_BROKER_URL=redis://redis:6379/2
-      - CELERY_RESULT_BACKEND=redis://redis:6379/2
+    # environment:
+    #   - CELERY_BROKER_URL=redis://redis:6379/2
+    #   - CELERY_RESULT_BACKEND=redis://redis:6379/2
+    env_file:
+      - .env
 
   # ---------------- Celery Beat ----------------
   celery-beat:
@@ -50,9 +54,11 @@ services:
     depends_on:
       - django_jenkinsexp
       - redis
-    environment:
-      - CELERY_BROKER_URL=redis://redis:6379/2
-      - CELERY_RESULT_BACKEND=redis://redis:6379/2
+    # environment:
+    #   - CELERY_BROKER_URL=redis://redis:6379/2
+    #   - CELERY_RESULT_BACKEND=redis://redis:6379/2
+    env_file:
+      - .env
 
   # ---------------- Flower Dashboard ----------------
   flower:
@@ -66,18 +72,22 @@ services:
     depends_on:
       - redis
       - celery
-    environment:
-      - CELERY_BROKER_URL=redis://redis:6379/2
-      - CELERY_RESULT_BACKEND=redis://redis:6379/2
+    # environment:
+    #   - CELERY_BROKER_URL=redis://redis:6379/2
+    #   - CELERY_RESULT_BACKEND=redis://redis:6379/2
+    env_file:
+      - .env
 
   # ---------------- Postgres ----------------
   db_jenkinsexp:
     image: postgres:15
     container_name: db_jenkinsexp
-    environment:
-      POSTGRES_DB: fpractice_db2
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: imrandell
+    # environment:
+    #   POSTGRES_DB: fpractice_db2
+    #   POSTGRES_USER: postgres
+    #   POSTGRES_PASSWORD: imrandell
+    env_file:
+      - .env
     volumes:
       - postgres_data:/var/lib/postgresql/data/
 
