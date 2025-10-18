@@ -1,5 +1,13 @@
 pipeline {
     agent any
+    // ---------------- Environment Variables ----------------
+    environment {
+        PYTHON = "C:\\Users\\imran\\AppData\\Local\\Programs\\Python\\Python38\\python.exe"
+        DOCKER_IMAGE = "imran3656/formvalidation_with_jenkinsexperiments"
+        DB_NAME = "fpractice_db2"
+        DB_USER = "postgres"
+        BACKUP_DIR = "D:/jenkins_backups"
+    }
 
     // ---------------- CRON Schedule ----------------
     triggers {
@@ -25,6 +33,7 @@ pipeline {
                     // Aliases
                     env.PYTHON = env.PYTHONPATH
                     env.BACKUP_DIR = env.DB_BKP_PATH
+
                 }
 
                 echo "✅ Loaded environment variables from .env"
@@ -35,7 +44,20 @@ pipeline {
 
         stage('Checkout Code') {
             steps {
-                git branch: 'main', url: 'https://github.com/imranworkspace/Fullvalidation_with_models_Jenkinsexperiments'
+                script {
+                    // Load .env file
+                    def envVars = readProperties file: '.env'
+
+                    // Export variables
+                    env.GIT_BRANCH = envVars.GIT_BRANCH
+                    env.GIT_REPO = envVars.GIT_REPO
+
+                    echo "Checking out branch: ${env.GIT_BRANCH}"
+                    echo "Repository: ${env.GIT_REPO}"
+
+                    // Use the environment variables
+                    git branch: env.GIT_BRANCH, url: env.GIT_REPO
+                }
             }
         }
 
