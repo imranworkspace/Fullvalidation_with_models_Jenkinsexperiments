@@ -22,6 +22,9 @@ COPY . /app/
 # Copy .env into container
 COPY .env /app/.env
 
+# Copy .env into container
+COPY static/ /app/static/
+
 # ---------- Collect Static Files (optional) ----------
 RUN python manage.py collectstatic --noinput || true
 
