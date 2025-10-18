@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
-from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -87,17 +86,17 @@ WSGI_APPLICATION = 'formvalidation_with__model.wsgi.application'
 }'''
 
 
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config('DB_NAME'),
-        'USER': config('DB_USER'),
-        'PASSWORD': config('DB_PASSWORD'),
-        'HOST': config('DB_HOST'),
-        'PORT': config('DB_PORT', default='5432'),
+        'ENGINE': 'django.db.backends.postgresql',# for docker
+        'NAME': 'fpractice_db2',
+        'USER': 'postgres',# your username
+        'PASSWORD': 'imrandell',
+        'HOST': 'db_jenkinsexp',  # for docker
+        'PORT': '5432',       # Default PostgreSQL port
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -160,17 +159,15 @@ MEDIA_ROOT = BASE_DIR / 'media'  # or os.path.join(BASE_DIR, 'media') if BASE_DI
 # celery and redis
 '''CELERY_BROKER_URL = "redis://127.0.0.1:6379/1"
 CELERY_RESULT_BACKEND = "redis://127.0.0.1:6379/1"''' 
-
 # for docker,jenkins
-# Redis connection
-REDIS_HOST = config('REDIS_HOST')
-REDIS_PORT = config('REDIS_PORT')
-REDIS_DB = config('REDIS_DB')
-
-
-CELERY_BROKER_URL = f"redis://{REDIS_HOST}:{REDIS_PORT}/{REDIS_DB}"
-CELERY_RESULT_BACKEND = f"redis://{REDIS_HOST}:{REDIS_PORT}/{REDIS_DB}"
+CELERY_BROKER_URL = "redis://redis:6379/2"
+CELERY_RESULT_BACKEND = "redis://redis:6379/2"
 
 
 # allow 81 port 
-CSRF_TRUSTED_ORIGINS = config('CSRF_TRUSTED', default='').split(',')
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost',
+    'http://127.0.0.1',
+    'http://localhost:81',
+    'http://127.0.0.1:81',
+]
