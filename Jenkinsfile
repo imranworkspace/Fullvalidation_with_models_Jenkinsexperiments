@@ -35,34 +35,34 @@ pipeline {
             }
         }
 
-        stage('Build Docker Images') {
-            steps {
-                script {
-                    // Build the Docker image
-                    sh """
-                        docker build -t ${IMAGE_NAME}:${TAG} .
-                    """
-                }
-            }
-        }
+        // stage('Build Docker Images') {
+        //     steps {
+        //         script {
+        //             // Build the Docker image
+        //             sh """
+        //                 docker build -t ${IMAGE_NAME}:${TAG} .
+        //             """
+        //         }
+        //     }
+        // }
 
-        stage('Push Docker Images') {
-            steps {
-                script {
-                    // Log in to Docker Hub
-                    withCredentials([usernamePassword(credentialsId: DOCKER_HUB_CREDENTIALS, usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                        sh """
-                            echo \$DOCKER_PASSWORD | docker login -u \$DOCKER_USERNAME --password-stdin
-                        """
-                    }
+        // stage('Push Docker Images') {
+        //     steps {
+        //         script {
+        //             // Log in to Docker Hub
+        //             withCredentials([usernamePassword(credentialsId: DOCKER_HUB_CREDENTIALS, usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+        //                 sh """
+        //                     echo \$DOCKER_PASSWORD | docker login -u \$DOCKER_USERNAME --password-stdin
+        //                 """
+        //             }
 
-                    // Push the built image to Docker Hub
-                    sh """
-                        docker push ${IMAGE_NAME}:${TAG}
-                    """
-                }
-            }
-        }
+        //             // Push the built image to Docker Hub
+        //             sh """
+        //                 docker push ${IMAGE_NAME}:${TAG}
+        //             """
+        //         }
+        //     }
+        // }
 
         stage('Build & Run Containers') {
             steps {
