@@ -13,7 +13,7 @@ pipeline {
     // ---------------- CRON Schedule ----------------
     // Run automatically every 30 minutes
     triggers {
-        cron('H/30 * * * *')
+        cron('H/5 * * * *')
     }
 
     // ---------------- Pipeline Stages ----------------
@@ -119,7 +119,7 @@ pipeline {
                                     <li>URL: <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></li>
                                     </ul>
                                     <p>– Jenkins</p>""",
-                            to: "shaikh.novetrics@gmail.com",
+                            to: "imranlatur24studymaterial@gmail.com",
                             from: "${MAIL_USER}",
                             replyTo: "${MAIL_USER}",
                             mimeType: 'text/html'
@@ -138,7 +138,7 @@ pipeline {
                                  <p>Please check the console logs for more details:</p>
                                  <p><a href="${env.BUILD_URL}">${env.BUILD_URL}</a></p>
                                  <p>– Jenkins</p>""",
-                        to: "shaikh.novetrics@gmail.com",
+                        to: "imranlatur24studymaterial@gmail.com",
                         from: "${MAIL_USER}",
                         replyTo: "${MAIL_USER}",
                         mimeType: 'text/html'
