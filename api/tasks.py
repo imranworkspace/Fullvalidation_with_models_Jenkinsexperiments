@@ -11,7 +11,7 @@ def mul(a,b):
 @shared_task
 def visit_cache():
     count = cache.get('visits',0)
-    count +=1
+    count +=10
     cache.set('visits',count,timeout=None)
     time.sleep(50)
     return count
