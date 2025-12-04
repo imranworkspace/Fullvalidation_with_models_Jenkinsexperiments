@@ -132,7 +132,7 @@ pipeline {
             script {
                 // withCredentials([usernamePassword(credentialsId: '786gmail', usernameVariable: 'MAIL_USER', passwordVariable: 'MAIL_PASS')]) {
                 
-                // '82bb22df-7adb-4b5f-81fe-fcd3782da29c' for imranlatur24studymaterial@gmail.com
+                // '82bb22df-7adb-4b5f-81fe-fcd3782da29c' for imranlatur24studymaterial.com
                 withCredentials([usernamePassword(credentialsId: '82bb22df-7adb-4b5f-81fe-fcd3782da29c', usernameVariable: 'MAIL_USER', passwordVariable: 'MAIL_PASS')]) {
                     emailext (
                         subject: "❌ FAILED: Django Jenkins Pipeline Error",
